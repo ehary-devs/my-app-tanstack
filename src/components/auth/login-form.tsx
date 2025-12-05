@@ -49,6 +49,7 @@ export function LoginForm({
     try {
       const success = await login(data.emailOrUsername, data.password)
       if (success) {
+        toast.success("Login successful")
         navigate({ to: "/dashboard" })
       }
     } catch (error) {

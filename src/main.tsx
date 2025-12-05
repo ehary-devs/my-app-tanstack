@@ -2,7 +2,6 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useAuthStore } from './stores/auth'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,30 +20,6 @@ import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
-
-// Auto-refresh accessToken dan fetch profile jika ada refreshToken saat app load
-const authStore = useAuthStore.getState()
-if (authStore.refreshToken && !authStore.accessToken) {
-  // Refresh accessToken di background
-  authStore.refreshAccessToken()
-    .then((newToken) => {
-      // Jika refresh berhasil, fetch profile
-      if (newToken && !authStore.user) {
-        authStore.fetchProfile().catch(() => {
-          console.warn('Failed to fetch profile on app load')
-        })
-      }
-    })
-    .catch(() => {
-      // Refresh gagal, akan di-handle oleh logout
-      console.warn('Failed to refresh token on app load')
-    })
-} else if (authStore.accessToken && !authStore.user) {
-  // Jika sudah ada accessToken, langsung fetch profile
-  authStore.fetchProfile().catch(() => {
-    console.warn('Failed to fetch profile on app load')
-  })
-}
 
 // Create a new router instance
 const router = createRouter({
