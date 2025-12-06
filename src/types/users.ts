@@ -1,5 +1,4 @@
-import type { Role } from "./auth"
-import type { Permission } from "./auth"
+import type { Role, Permission } from "./authorization"
 
 export interface User {
     uuid: string
@@ -11,7 +10,15 @@ export interface User {
     isTrustedAuthor: boolean
     createdAt: string
     updatedAt: string
+    deletedAt: string | null
     roles: Role[]
     permissions: Permission[]
 }
   
+export interface UsersSearchParams {
+    page?: number
+    perPage?: number
+    orderBy?: string
+    orderDirection?: 'asc' | 'desc'
+    search?: string
+}

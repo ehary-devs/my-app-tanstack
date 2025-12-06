@@ -2,20 +2,15 @@
 
 import * as React from "react"
 import {
-  BookOpen,
-  Bot,
   Command,
-  Frame,
-  LifeBuoy,
-  Map,
-  PieChart,
-  Send,
+  Home,
+  LogOut,
   Settings2,
-  SquareTerminal,
+  Settings,
+  Users,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
-// import { NavProjects } from "@/components/nav-projects"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
 import {
@@ -27,129 +22,85 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { Link } from "@tanstack/react-router"
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
-      title: "Playground",
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: Home,
+    },
+    {
+      title: "Content Pages",
       url: "#",
-      icon: SquareTerminal,
-      isActive: true,
+      icon: Settings2,
+      isActive: false,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Create Page",
+          url: "/pages/create",
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "List Pages",
+          url: "/pages",
+        }
+      ],
+    },
+    {
+      title: "Content Posts",
+      url: "#",
+      icon: Settings2,
+      isActive: false,
+      items: [
+        {
+          title: "Create Post",
+          url: "/posts/create",
         },
         {
-          title: "Settings",
-          url: "#",
+          title: "List Posts",
+          url: "/posts",
+        }
+      ],
+    },
+    {
+      title: "Authorization",
+      url: "#",
+      icon: Settings2,
+      isActive: false,
+      items: [
+        {
+          title: "Roles",
+          url: "/roles",
+          roles: [],
+          permissions: ["roles.view"],
+        },
+        {
+          title: "Permissions",
+          url: "/permissions",
+          roles: [],
+          permissions: ["permissions.view"],
         },
       ],
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
+      title: "Users",
+      url: "/users",
+      icon: Users,
     },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
+  ],  
+  navSecondary: [
     {
       title: "Settings",
       url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: LifeBuoy,
+      icon: Settings,
     },
     {
-      title: "Feedback",
+      title: "Logout",
       url: "#",
-      icon: Send,
+      icon: LogOut,
     },
   ],
-//   projects: [
-//     {
-//       name: "Design Engineering",
-//       url: "#",
-//       icon: Frame,
-//     },
-//     {
-//       name: "Sales & Marketing",
-//       url: "#",
-//       icon: PieChart,
-//     },
-//     {
-//       name: "Travel",
-//       url: "#",
-//       icon: Map,
-//     },
-//   ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -159,7 +110,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <Link to="/dashboard">
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <Command className="size-4" />
                 </div>
@@ -167,18 +118,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <span className="truncate font-medium">Admin Panel</span>
                   <span className="truncate text-xs">Manage your dashboard</span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        {/* <NavProjects projects={data.projects} /> */}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   )

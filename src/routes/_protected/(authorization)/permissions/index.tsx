@@ -12,7 +12,7 @@ import { tableColumns } from "./columns"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { FilterOption, Filters } from "@/components/ui/data-table/datatable"
 
-const breadcrumb = [{ title: 'Data Users Management', url: '/users' }]
+const breadcrumb = [{ title: 'Data Permissions Management', url: '/permissions' }]
 
 const filterOptions: FilterOption[] = [
   {
@@ -25,9 +25,9 @@ const filterOptions: FilterOption[] = [
   },
 ]
 
-export const Route = createFileRoute('/_protected/users/')({
+export const Route = createFileRoute('/_protected/(authorization)/permissions/')({
   beforeLoad: () => {
-    if (!hasPermission("users.read")) {
+    if (!hasPermission("permission.read")) {
       throw redirect({ to: "/403" })
     }
   },
@@ -37,8 +37,8 @@ export const Route = createFileRoute('/_protected/users/')({
     </AppAdmin>
   ),
   head: () => ({
-    title: 'Users',
-    meta: [{ name: 'description', content: 'This is the users page' }],
+    title: 'Permissions',
+    meta: [{ name: 'description', content: 'This is the permissions page' }],
   })
 })
 
@@ -46,14 +46,14 @@ function RouteComponent() {
   const [page, setPage] = useState(1)
   const [perPage, setPerPage] = useState(10)
   const [search, setSearch] = useState("")
-  const [orderBy, setOrderBy] = useState("firstName")
+  const [orderBy, setOrderBy] = useState("name")
   const [orderDirection, setOrderDirection] = useState<"ASC" | "DESC">("ASC")
   const [filters, setFilters] = useState<Filters>({})
   
   const debouncedSearch = useDebounce(search, 400)
 
   const { data, isLoading } = useQuery({
-    queryKey: ["users", { page, perPage, search: debouncedSearch, orderBy, orderDirection, filters }],
+    queryKey: ["permissions", { page, perPage, search: debouncedSearch, orderBy, orderDirection, filters }],
     queryFn: async () => {
       const params = buildQuery({
         page,
@@ -63,7 +63,7 @@ function RouteComponent() {
         orderDirection,
         ...(filters.status?.length && { status: filters.status.join(",") }),
       })
-      const res = await apiFetchJson(`/users${params}`)
+      const res = await apiFetchJson(`/permissions${params}`)
       return {
         items: res.data ?? [],
         totalPages: res.meta?.totalPages ?? 1,
@@ -93,7 +93,7 @@ function RouteComponent() {
     <div className="py-6 space-y-6">
       <Card className="shadow-none">
         <CardHeader>
-          <CardTitle>Data Users Management</CardTitle>
+          <CardTitle>Data Permissions Management</CardTitle>
         </CardHeader>
         <CardContent>
           <DataTable
@@ -106,7 +106,7 @@ function RouteComponent() {
             totalPages={data?.totalPages ?? 1}
             search={search}
             onSearchChange={setSearch}
-            searchPlaceholder="Cari user…"
+            searchPlaceholder="Cari permission…"
             filterOptions={filterOptions}
             filters={filters}
             onFiltersChange={(newFilters) => {

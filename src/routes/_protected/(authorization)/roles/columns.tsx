@@ -1,29 +1,22 @@
-import type { User } from "@/types"
+import type { Role } from "@/types"
 import type { ColumnConfig } from "@/components/ui/data-table/create-column"
 import { Badge } from "@/components/ui/badge"
 
-export const tableColumns: ColumnConfig<User>[] = [
+export const tableColumns: ColumnConfig<Role>[] = [
   {
-    key: "firstName",
+    key: "name",
     label: "Nama",
     sortable: true,
-    cell: (row) => `${row.firstName} ${row.lastName}`,
+    cell: (row) => row.name,
     cellClassName: "text-muted-foreground",
   },
   {
-    key: "username",
-    label: "Username",
+    key: "description",
+    label: "Deskripsi",
     sortable: true,
-    cell: (row) => row.username,
+    cell: (row) => row.description,
     cellClassName: "text-muted-foreground",
-  },
-  {
-    key: "email",
-    label: "Email",
-    sortable: true,
-    cell: (row) => row.email,
-    cellClassName: "text-muted-foreground",
-  },
+  },  
   {
     key: "isActive",
     label: "Status",

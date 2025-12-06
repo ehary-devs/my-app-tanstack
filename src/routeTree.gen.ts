@@ -10,26 +10,64 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProtectedRouteImport } from './routes/_protected'
-import { Route as R403RouteImport } from './routes/403'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as error503RouteImport } from './routes/(error)/503'
+import { Route as error500RouteImport } from './routes/(error)/500'
+import { Route as error429RouteImport } from './routes/(error)/429'
+import { Route as error404RouteImport } from './routes/(error)/404'
+import { Route as error403RouteImport } from './routes/(error)/403'
+import { Route as error401RouteImport } from './routes/(error)/401'
+import { Route as error400RouteImport } from './routes/(error)/400'
 import { Route as authSignupRouteImport } from './routes/(auth)/signup'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as authForgotRouteImport } from './routes/(auth)/forgot'
 import { Route as ProtectedUsersIndexRouteImport } from './routes/_protected/users/index'
 import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected/dashboard/index'
+import { Route as ProtectedauthorizationRolesIndexRouteImport } from './routes/_protected/(authorization)/roles/index'
+import { Route as ProtectedauthorizationPermissionsIndexRouteImport } from './routes/_protected/(authorization)/permissions/index'
 
 const ProtectedRoute = ProtectedRouteImport.update({
   id: '/_protected',
   getParentRoute: () => rootRouteImport,
 } as any)
-const R403Route = R403RouteImport.update({
-  id: '/403',
-  path: '/403',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const error503Route = error503RouteImport.update({
+  id: '/(error)/503',
+  path: '/503',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const error500Route = error500RouteImport.update({
+  id: '/(error)/500',
+  path: '/500',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const error429Route = error429RouteImport.update({
+  id: '/(error)/429',
+  path: '/429',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const error404Route = error404RouteImport.update({
+  id: '/(error)/404',
+  path: '/404',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const error403Route = error403RouteImport.update({
+  id: '/(error)/403',
+  path: '/403',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const error401Route = error401RouteImport.update({
+  id: '/(error)/401',
+  path: '/401',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const error400Route = error400RouteImport.update({
+  id: '/(error)/400',
+  path: '/400',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authSignupRoute = authSignupRouteImport.update({
@@ -57,67 +95,140 @@ const ProtectedDashboardIndexRoute = ProtectedDashboardIndexRouteImport.update({
   path: '/dashboard/',
   getParentRoute: () => ProtectedRoute,
 } as any)
+const ProtectedauthorizationRolesIndexRoute =
+  ProtectedauthorizationRolesIndexRouteImport.update({
+    id: '/(authorization)/roles/',
+    path: '/roles/',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
+const ProtectedauthorizationPermissionsIndexRoute =
+  ProtectedauthorizationPermissionsIndexRouteImport.update({
+    id: '/(authorization)/permissions/',
+    path: '/permissions/',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/403': typeof R403Route
   '/forgot': typeof authForgotRoute
   '/login': typeof authLoginRoute
   '/signup': typeof authSignupRoute
+  '/400': typeof error400Route
+  '/401': typeof error401Route
+  '/403': typeof error403Route
+  '/404': typeof error404Route
+  '/429': typeof error429Route
+  '/500': typeof error500Route
+  '/503': typeof error503Route
   '/dashboard': typeof ProtectedDashboardIndexRoute
   '/users': typeof ProtectedUsersIndexRoute
+  '/permissions': typeof ProtectedauthorizationPermissionsIndexRoute
+  '/roles': typeof ProtectedauthorizationRolesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/403': typeof R403Route
   '/forgot': typeof authForgotRoute
   '/login': typeof authLoginRoute
   '/signup': typeof authSignupRoute
+  '/400': typeof error400Route
+  '/401': typeof error401Route
+  '/403': typeof error403Route
+  '/404': typeof error404Route
+  '/429': typeof error429Route
+  '/500': typeof error500Route
+  '/503': typeof error503Route
   '/dashboard': typeof ProtectedDashboardIndexRoute
   '/users': typeof ProtectedUsersIndexRoute
+  '/permissions': typeof ProtectedauthorizationPermissionsIndexRoute
+  '/roles': typeof ProtectedauthorizationRolesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/403': typeof R403Route
   '/_protected': typeof ProtectedRouteWithChildren
   '/(auth)/forgot': typeof authForgotRoute
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/signup': typeof authSignupRoute
+  '/(error)/400': typeof error400Route
+  '/(error)/401': typeof error401Route
+  '/(error)/403': typeof error403Route
+  '/(error)/404': typeof error404Route
+  '/(error)/429': typeof error429Route
+  '/(error)/500': typeof error500Route
+  '/(error)/503': typeof error503Route
   '/_protected/dashboard/': typeof ProtectedDashboardIndexRoute
   '/_protected/users/': typeof ProtectedUsersIndexRoute
+  '/_protected/(authorization)/permissions/': typeof ProtectedauthorizationPermissionsIndexRoute
+  '/_protected/(authorization)/roles/': typeof ProtectedauthorizationRolesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/403'
     | '/forgot'
     | '/login'
     | '/signup'
+    | '/400'
+    | '/401'
+    | '/403'
+    | '/404'
+    | '/429'
+    | '/500'
+    | '/503'
     | '/dashboard'
     | '/users'
+    | '/permissions'
+    | '/roles'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/403' | '/forgot' | '/login' | '/signup' | '/dashboard' | '/users'
+  to:
+    | '/'
+    | '/forgot'
+    | '/login'
+    | '/signup'
+    | '/400'
+    | '/401'
+    | '/403'
+    | '/404'
+    | '/429'
+    | '/500'
+    | '/503'
+    | '/dashboard'
+    | '/users'
+    | '/permissions'
+    | '/roles'
   id:
     | '__root__'
     | '/'
-    | '/403'
     | '/_protected'
     | '/(auth)/forgot'
     | '/(auth)/login'
     | '/(auth)/signup'
+    | '/(error)/400'
+    | '/(error)/401'
+    | '/(error)/403'
+    | '/(error)/404'
+    | '/(error)/429'
+    | '/(error)/500'
+    | '/(error)/503'
     | '/_protected/dashboard/'
     | '/_protected/users/'
+    | '/_protected/(authorization)/permissions/'
+    | '/_protected/(authorization)/roles/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  R403Route: typeof R403Route
   ProtectedRoute: typeof ProtectedRouteWithChildren
   authForgotRoute: typeof authForgotRoute
   authLoginRoute: typeof authLoginRoute
   authSignupRoute: typeof authSignupRoute
+  error400Route: typeof error400Route
+  error401Route: typeof error401Route
+  error403Route: typeof error403Route
+  error404Route: typeof error404Route
+  error429Route: typeof error429Route
+  error500Route: typeof error500Route
+  error503Route: typeof error503Route
 }
 
 declare module '@tanstack/react-router' {
@@ -129,18 +240,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/403': {
-      id: '/403'
-      path: '/403'
-      fullPath: '/403'
-      preLoaderRoute: typeof R403RouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(error)/503': {
+      id: '/(error)/503'
+      path: '/503'
+      fullPath: '/503'
+      preLoaderRoute: typeof error503RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(error)/500': {
+      id: '/(error)/500'
+      path: '/500'
+      fullPath: '/500'
+      preLoaderRoute: typeof error500RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(error)/429': {
+      id: '/(error)/429'
+      path: '/429'
+      fullPath: '/429'
+      preLoaderRoute: typeof error429RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(error)/404': {
+      id: '/(error)/404'
+      path: '/404'
+      fullPath: '/404'
+      preLoaderRoute: typeof error404RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(error)/403': {
+      id: '/(error)/403'
+      path: '/403'
+      fullPath: '/403'
+      preLoaderRoute: typeof error403RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(error)/401': {
+      id: '/(error)/401'
+      path: '/401'
+      fullPath: '/401'
+      preLoaderRoute: typeof error401RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(error)/400': {
+      id: '/(error)/400'
+      path: '/400'
+      fullPath: '/400'
+      preLoaderRoute: typeof error400RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)/signup': {
@@ -178,17 +331,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedDashboardIndexRouteImport
       parentRoute: typeof ProtectedRoute
     }
+    '/_protected/(authorization)/roles/': {
+      id: '/_protected/(authorization)/roles/'
+      path: '/roles'
+      fullPath: '/roles'
+      preLoaderRoute: typeof ProtectedauthorizationRolesIndexRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/(authorization)/permissions/': {
+      id: '/_protected/(authorization)/permissions/'
+      path: '/permissions'
+      fullPath: '/permissions'
+      preLoaderRoute: typeof ProtectedauthorizationPermissionsIndexRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
   }
 }
 
 interface ProtectedRouteChildren {
   ProtectedDashboardIndexRoute: typeof ProtectedDashboardIndexRoute
   ProtectedUsersIndexRoute: typeof ProtectedUsersIndexRoute
+  ProtectedauthorizationPermissionsIndexRoute: typeof ProtectedauthorizationPermissionsIndexRoute
+  ProtectedauthorizationRolesIndexRoute: typeof ProtectedauthorizationRolesIndexRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedDashboardIndexRoute: ProtectedDashboardIndexRoute,
   ProtectedUsersIndexRoute: ProtectedUsersIndexRoute,
+  ProtectedauthorizationPermissionsIndexRoute:
+    ProtectedauthorizationPermissionsIndexRoute,
+  ProtectedauthorizationRolesIndexRoute: ProtectedauthorizationRolesIndexRoute,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
@@ -197,11 +369,17 @@ const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  R403Route: R403Route,
   ProtectedRoute: ProtectedRouteWithChildren,
   authForgotRoute: authForgotRoute,
   authLoginRoute: authLoginRoute,
   authSignupRoute: authSignupRoute,
+  error400Route: error400Route,
+  error401Route: error401Route,
+  error403Route: error403Route,
+  error404Route: error404Route,
+  error429Route: error429Route,
+  error500Route: error500Route,
+  error503Route: error503Route,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
