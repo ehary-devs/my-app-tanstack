@@ -18,6 +18,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import { Link, useLocation } from "@tanstack/react-router"
+import { cn } from "@/lib/utils"
 
 export function NavMain({
   items,
@@ -27,6 +28,7 @@ export function NavMain({
     url: string
     icon: LucideIcon
     isActive?: boolean
+    group?: string
     items?: {
       title: string
       url: string
@@ -45,65 +47,113 @@ export function NavMain({
     return currentPath === url
   }
 
-  return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
-      <SidebarMenu>
-        {items.map((item) => {
-          const itemActive = isItemActive(item.url)
-          const hasActiveSubItem = item.items?.some((subItem) => isSubItemActive(subItem.url))
-          const shouldBeOpen = itemActive || hasActiveSubItem || item.isActive
+  const renderMenuItem = (item: typeof items[0]) => {
+    const itemActive = isItemActive(item.url)
+    const hasActiveSubItem = item.items?.some((subItem) => isSubItemActive(subItem.url))
+    const shouldBeOpen = itemActive || hasActiveSubItem || item.isActive
 
-          return (
-            <Collapsible key={item.title} asChild defaultOpen={shouldBeOpen}>
-              <SidebarMenuItem>
-                {item.items?.length ? (
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton 
-                      tooltip={item.title} 
-                      className="group"
-                      isActive={hasActiveSubItem}
-                    >
-                      <item.icon />
-                      <span>{item.title}</span>
-                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]:rotate-90" />
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                ) : (
-                  <SidebarMenuButton 
-                    asChild 
-                    tooltip={item.title}
-                    isActive={itemActive}
-                  >
-                    <Link to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                )}
-                {item.items?.length ? (
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {item.items?.map((subItem) => {
-                        const subItemActive = isSubItemActive(subItem.url)
-                        return (
-                          <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton asChild isActive={subItemActive}>
-                              <Link to={subItem.url}>
-                                <span>{subItem.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        )
-                      })}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                ) : null}
-              </SidebarMenuItem>
-            </Collapsible>
-          )
-        })}
-      </SidebarMenu>
-    </SidebarGroup>
+    return (
+      <Collapsible key={item.title} asChild defaultOpen={shouldBeOpen}>
+        <SidebarMenuItem>
+          {item.items?.length ? (
+            <CollapsibleTrigger asChild>
+              <SidebarMenuButton 
+                tooltip={item.title} 
+                className="group"
+                isActive={hasActiveSubItem}
+              >
+                <item.icon />
+                <span>{item.title}</span>
+                <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]:rotate-90" />
+              </SidebarMenuButton>
+            </CollapsibleTrigger>
+          ) : (
+            <SidebarMenuButton 
+              asChild 
+              tooltip={item.title}
+              isActive={itemActive}
+            >
+              <Link to={item.url}>
+                <item.icon />
+                <span>{item.title}</span>
+              </Link>
+            </SidebarMenuButton>
+          )}
+          {item.items?.length ? (
+            <CollapsibleContent>
+              <SidebarMenuSub>
+                {item.items?.map((subItem) => {
+                  const subItemActive = isSubItemActive(subItem.url)
+                  return (
+                    <SidebarMenuSubItem key={subItem.title}>
+                      <SidebarMenuSubButton asChild isActive={subItemActive}>
+                        <Link to={subItem.url}>
+                          <span>{subItem.title}</span>
+                        </Link>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )
+                })}
+              </SidebarMenuSub>
+            </CollapsibleContent>
+          ) : null}
+        </SidebarMenuItem>
+      </Collapsible>
+    )
+  }
+
+  // Group items while maintaining original array order
+  const groups: Array<{ groupName: string; items: typeof items }> = []
+  let currentGroup: { groupName: string; items: typeof items } | null = null
+
+  items.forEach((item) => {
+    const groupName = item.group || ""
+    
+    if (groupName) {
+      // If this item has a group
+      if (currentGroup && currentGroup.groupName === groupName) {
+        // Same group as previous item, add to current group
+        currentGroup.items.push(item)
+      } else {
+        // New group or different group, start a new group
+        if (currentGroup) {
+          groups.push(currentGroup)
+        }
+        currentGroup = { groupName, items: [item] }
+      }
+    } else {
+      // Item without group
+      if (currentGroup) {
+        // Close previous group first
+        groups.push(currentGroup)
+        currentGroup = null
+      }
+      // Add as separate group without label
+      groups.push({ groupName: "", items: [item] })
+    }
+  })
+
+  // Don't forget the last group
+  if (currentGroup) {
+    groups.push(currentGroup)
+  }
+
+  return (
+    <>
+      {groups.map((group, groupIndex) => (
+        <SidebarGroup 
+          key={`${group.groupName}-${groupIndex}`}
+          className={cn(
+            groupIndex > 0 && "-mt-2",
+            "py-1"
+          )}
+        >
+          {group.groupName && <SidebarGroupLabel>{group.groupName}</SidebarGroupLabel>}
+          <SidebarMenu>
+            {group.items.map((item) => renderMenuItem(item))}
+          </SidebarMenu>
+        </SidebarGroup>
+      ))}
+    </>
   )
 }

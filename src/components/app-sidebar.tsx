@@ -32,6 +32,7 @@ const data = {
       icon: Home,
     },
     {
+      group: "Content",
       title: "Content Pages",
       url: "#",
       icon: Settings2,
@@ -48,6 +49,7 @@ const data = {
       ],
     },
     {
+      group: "Content",
       title: "Content Posts",
       url: "#",
       icon: Settings2,
@@ -64,6 +66,7 @@ const data = {
       ],
     },
     {
+      group: "Authorization",
       title: "Authorization",
       url: "#",
       icon: Settings2,
@@ -73,13 +76,13 @@ const data = {
           title: "Roles",
           url: "/roles",
           roles: [],
-          permissions: ["roles.view"],
+          permissions: ["role.read"],
         },
         {
           title: "Permissions",
           url: "/permissions",
           roles: [],
-          permissions: ["permissions.view"],
+          permissions: ["permission.read"],
         },
       ],
     },
