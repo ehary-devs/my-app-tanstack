@@ -1,6 +1,6 @@
 import { createRouter } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
-
+import { NotFound } from './routes/(error)/not-found';
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
@@ -17,6 +17,7 @@ export const router = createRouter({
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
+  defaultNotFoundComponent: NotFound,
 });
 
 declare module '@tanstack/react-router' {

@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { apiFetchJson } from "../lib/api/client"
+import { apiFetchJson } from "../lib/api"
 import type { Profile, AuthStore, Permission, Role } from "../types/auth"
 
 // Merge permissions dari user + roles
