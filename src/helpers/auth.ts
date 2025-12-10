@@ -18,7 +18,13 @@ export function hasAllPermissions(list: string[]) {
   return list.every(name => perms.some(p => p.name === name))
 }
 
-export function hasAccess({ roles = [], permissions = [] }) {
+export function hasAccess({
+  roles = [],
+  permissions = [],
+}: {
+  roles?: string[]
+  permissions?: string[]
+}) {
   const state = useAuthStore.getState()
 
   const roleValid =

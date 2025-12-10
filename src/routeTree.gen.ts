@@ -25,6 +25,7 @@ import { Route as ProtectedUsersIndexRouteImport } from './routes/_protected/use
 import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected/dashboard/index'
 import { Route as ProtectedauthorizationRolesIndexRouteImport } from './routes/_protected/(authorization)/roles/index'
 import { Route as ProtectedauthorizationPermissionsIndexRouteImport } from './routes/_protected/(authorization)/permissions/index'
+import { Route as ProtectedauthorizationRolessettingsSettingsUuidRouteImport } from './routes/_protected/(authorization)/roles/(settings)/settings.$uuid'
 
 const ProtectedRoute = ProtectedRouteImport.update({
   id: '/_protected',
@@ -107,6 +108,12 @@ const ProtectedauthorizationPermissionsIndexRoute =
     path: '/permissions/',
     getParentRoute: () => ProtectedRoute,
   } as any)
+const ProtectedauthorizationRolessettingsSettingsUuidRoute =
+  ProtectedauthorizationRolessettingsSettingsUuidRouteImport.update({
+    id: '/(authorization)/roles/(settings)/settings/$uuid',
+    path: '/roles/settings/$uuid',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/users': typeof ProtectedUsersIndexRoute
   '/permissions': typeof ProtectedauthorizationPermissionsIndexRoute
   '/roles': typeof ProtectedauthorizationRolesIndexRoute
+  '/roles/settings/$uuid': typeof ProtectedauthorizationRolessettingsSettingsUuidRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -141,6 +149,7 @@ export interface FileRoutesByTo {
   '/users': typeof ProtectedUsersIndexRoute
   '/permissions': typeof ProtectedauthorizationPermissionsIndexRoute
   '/roles': typeof ProtectedauthorizationRolesIndexRoute
+  '/roles/settings/$uuid': typeof ProtectedauthorizationRolessettingsSettingsUuidRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -160,6 +169,7 @@ export interface FileRoutesById {
   '/_protected/users/': typeof ProtectedUsersIndexRoute
   '/_protected/(authorization)/permissions/': typeof ProtectedauthorizationPermissionsIndexRoute
   '/_protected/(authorization)/roles/': typeof ProtectedauthorizationRolesIndexRoute
+  '/_protected/(authorization)/roles/(settings)/settings/$uuid': typeof ProtectedauthorizationRolessettingsSettingsUuidRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -179,6 +189,7 @@ export interface FileRouteTypes {
     | '/users'
     | '/permissions'
     | '/roles'
+    | '/roles/settings/$uuid'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -196,6 +207,7 @@ export interface FileRouteTypes {
     | '/users'
     | '/permissions'
     | '/roles'
+    | '/roles/settings/$uuid'
   id:
     | '__root__'
     | '/'
@@ -214,6 +226,7 @@ export interface FileRouteTypes {
     | '/_protected/users/'
     | '/_protected/(authorization)/permissions/'
     | '/_protected/(authorization)/roles/'
+    | '/_protected/(authorization)/roles/(settings)/settings/$uuid'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -345,6 +358,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedauthorizationPermissionsIndexRouteImport
       parentRoute: typeof ProtectedRoute
     }
+    '/_protected/(authorization)/roles/(settings)/settings/$uuid': {
+      id: '/_protected/(authorization)/roles/(settings)/settings/$uuid'
+      path: '/roles/settings/$uuid'
+      fullPath: '/roles/settings/$uuid'
+      preLoaderRoute: typeof ProtectedauthorizationRolessettingsSettingsUuidRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
   }
 }
 
@@ -353,6 +373,7 @@ interface ProtectedRouteChildren {
   ProtectedUsersIndexRoute: typeof ProtectedUsersIndexRoute
   ProtectedauthorizationPermissionsIndexRoute: typeof ProtectedauthorizationPermissionsIndexRoute
   ProtectedauthorizationRolesIndexRoute: typeof ProtectedauthorizationRolesIndexRoute
+  ProtectedauthorizationRolessettingsSettingsUuidRoute: typeof ProtectedauthorizationRolessettingsSettingsUuidRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
@@ -361,6 +382,8 @@ const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedauthorizationPermissionsIndexRoute:
     ProtectedauthorizationPermissionsIndexRoute,
   ProtectedauthorizationRolesIndexRoute: ProtectedauthorizationRolesIndexRoute,
+  ProtectedauthorizationRolessettingsSettingsUuidRoute:
+    ProtectedauthorizationRolessettingsSettingsUuidRoute,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(

@@ -10,24 +10,15 @@ import { DataTable } from "@/components/ui/data-table/datatable"
 import { createColumns } from "@/components/ui/data-table/create-column"
 import { tableColumns } from "./columns"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import type { FilterOption, Filters } from "@/components/ui/data-table/datatable"
+import { TableLoading } from "@/components/ui/data-table/table-loading"
+import type { FilterOption, Filters, ActionButton } from "@/components/ui/data-table/datatable"
+import { Plus } from "lucide-react"
 
 const breadcrumb = [{ title: 'Data Users Management', url: '/users' }]
 
-const filterOptions: FilterOption[] = [
-  {
-    key: "status",
-    label: "Status",
-    options: [
-      { value: "active", label: "Active" },
-      { value: "inactive", label: "Inactive" },
-    ],
-  },
-]
-
 export const Route = createFileRoute('/_protected/users/')({
   beforeLoad: () => {
-    if (!hasPermission("users.read")) {
+    if (!hasPermission("user.read")) {
       throw redirect({ to: "/403" })
     }
   },
@@ -87,7 +78,28 @@ function RouteComponent() {
     [orderBy, orderDirection, page, perPage]
   )
 
-  if (isLoading && !data) return <>Loading...</>
+  if (isLoading && !data) return <TableLoading title="Data Users Management" />
+
+  const filterOptions: FilterOption[] = [
+    {
+      key: "status",
+      label: "Status",
+      options: [
+        { value: "active", label: "Active" },
+        { value: "inactive", label: "Inactive" },
+      ],
+    },
+  ]
+
+  const actionButtons: ActionButton[] = [
+    {
+      label: "Tambah User",
+      to: "/users/create",
+      icon: <Plus className="h-4 w-4" />,
+      variant: "default",
+    },
+  ]
+
 
   return (
     <div className="py-6 space-y-6">
@@ -113,6 +125,7 @@ function RouteComponent() {
               setFilters(newFilters)
               setPage(1)
             }}
+            actionButtons={actionButtons}
           />
         </CardContent>
       </Card>

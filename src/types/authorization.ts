@@ -3,6 +3,7 @@ export interface Role {
     name: string
     description: string
     isActive: boolean
+    permissionsCount: number
     createdAt: string
     updatedAt: string
 }

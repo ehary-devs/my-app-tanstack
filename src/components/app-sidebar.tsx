@@ -4,15 +4,15 @@ import * as React from "react"
 import {
   Command,
   Home,
-  LogOut,
   Settings2,
-  Settings,
+  ShieldUser,
   Users,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
+import { ThemeToggle } from "@/components/theme-toggle"
 import {
   Sidebar,
   SidebarContent,
@@ -30,6 +30,8 @@ const data = {
       title: "Dashboard",
       url: "/dashboard",
       icon: Home,
+      roles: [],
+      permissions: ["dashboard.view"],
     },
     {
       group: "Content",
@@ -69,7 +71,7 @@ const data = {
       group: "Authorization",
       title: "Authorization",
       url: "#",
-      icon: Settings2,
+      icon: ShieldUser,
       isActive: false,
       items: [
         {
@@ -84,26 +86,23 @@ const data = {
           roles: [],
           permissions: ["permission.read"],
         },
+        {
+          title: "User Access",
+          url: "/user-access",
+          roles: [],
+          permissions: ["user.access.read"],
+        }
       ],
     },
     {
       title: "Users",
       url: "/users",
       icon: Users,
+      roles: [],
+      permissions: ["user.read"],
     },
   ],  
-  navSecondary: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings,
-    },
-    {
-      title: "Logout",
-      url: "#",
-      icon: LogOut,
-    },
-  ],
+  navSecondary: [],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -131,6 +130,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <ThemeToggle />
+          </SidebarMenuItem>
+        </SidebarMenu>
         <NavUser />
       </SidebarFooter>
     </Sidebar>

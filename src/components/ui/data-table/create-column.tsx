@@ -1,6 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import type React from "react"
 import { SortableHeader } from "./sortable-header"
+import { cn } from "@/lib/utils"
 
 export interface ColumnConfig<T> {
   key: string
@@ -8,6 +9,8 @@ export interface ColumnConfig<T> {
   sortable?: boolean
   cell?: (row: T) => React.ReactNode
   cellClassName?: string
+  headerClassName?: string
+  align?: "left" | "center" | "right"
 }
 
 interface CreateColumnOptions {
@@ -23,27 +26,62 @@ export function createColumn<T>(
   config: ColumnConfig<T>,
   options: CreateColumnOptions
 ): ColumnDef<T> {
-  const { key, label, sortable = false, cell, cellClassName } = config
+  const { 
+    key, 
+    label, 
+    sortable = false, 
+    cell, 
+    cellClassName,
+    headerClassName,
+    align = "left"
+  } = config
   const { orderBy, orderDirection, onSort } = options
+
+  // Map align to text alignment classes for cells
+  const cellAlignClass = {
+    left: "text-left",
+    center: "text-center",
+    right: "text-right",
+  }[align]
+
+  // Map align to flex alignment classes for headers
+  const headerAlignClass = {
+    left: "justify-start",
+    center: "justify-center",
+    right: "justify-end",
+  }[align]
+
+  const headerContent = sortable
+    ? () => (
+        <SortableHeader
+          label={label}
+          columnKey={key}
+          orderBy={orderBy}
+          orderDirection={orderDirection}
+          onSort={onSort}
+          className={cn(headerAlignClass, headerClassName)}
+        />
+      )
+    : () => (
+        <div className={cn("flex", headerAlignClass, headerClassName)}>
+          {label}
+        </div>
+      )
 
   return {
     id: key,
     accessorKey: key,
-    header: sortable
-      ? () => (
-          <SortableHeader
-            label={label}
-            columnKey={key}
-            orderBy={orderBy}
-            orderDirection={orderDirection}
-            onSort={onSort}
-          />
-        )
-      : label,
+    header: headerContent,
     cell: cell
-      ? ({ row }) => <div className={cellClassName}>{cell(row.original)}</div>
+      ? ({ row }) => (
+          <div className={cn(cellAlignClass, cellClassName)}>
+            {cell(row.original)}
+          </div>
+        )
       : ({ row }) => (
-          <div className={cellClassName}>{String(row.getValue(key) ?? "")}</div>
+          <div className={cn(cellAlignClass, cellClassName)}>
+            {String(row.getValue(key) ?? "")}
+          </div>
         ),
   }
 }

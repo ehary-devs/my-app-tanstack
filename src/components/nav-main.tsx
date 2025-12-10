@@ -19,22 +19,27 @@ import {
 } from "@/components/ui/sidebar"
 import { Link, useLocation } from "@tanstack/react-router"
 import { cn } from "@/lib/utils"
+import { hasAccess } from "@/helpers/auth"
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    title: string
-    url: string
-    icon: LucideIcon
-    isActive?: boolean
-    group?: string
-    items?: {
-      title: string
-      url: string
-    }[]
-  }[]
-}) {
+type NavSubItem = {
+  title: string
+  url: string
+  roles?: string[]
+  permissions?: string[]
+}
+
+type NavItem = {
+  title: string
+  url: string
+  icon: LucideIcon
+  isActive?: boolean
+  group?: string
+  roles?: string[]
+  permissions?: string[]
+  items?: NavSubItem[]
+}
+
+export function NavMain({ items }: { items: NavItem[] }) {
   const location = useLocation()
   const currentPath = location.pathname
 
@@ -44,10 +49,11 @@ export function NavMain({
   }
 
   const isSubItemActive = (url: string) => {
-    return currentPath === url
+    if (url === "#") return false
+    return currentPath === url || currentPath.startsWith(url + "/")
   }
 
-  const renderMenuItem = (item: typeof items[0]) => {
+  const renderMenuItem = (item: NavItem) => {
     const itemActive = isItemActive(item.url)
     const hasActiveSubItem = item.items?.some((subItem) => isSubItemActive(subItem.url))
     const shouldBeOpen = itemActive || hasActiveSubItem || item.isActive
@@ -103,10 +109,31 @@ export function NavMain({
   }
 
   // Group items while maintaining original array order
-  const groups: Array<{ groupName: string; items: typeof items }> = []
-  let currentGroup: { groupName: string; items: typeof items } | null = null
+  const accessibleItems = items
+    .map((item) => {
+      const filteredSubItems = item.items?.filter((subItem) =>
+        hasAccess({
+          roles: subItem.roles ?? [],
+          permissions: subItem.permissions ?? [],
+        })
+      )
 
-  items.forEach((item) => {
+      return {
+        ...item,
+        items: filteredSubItems,
+      }
+    })
+    .filter((item) =>
+      hasAccess({
+        roles: item.roles ?? [],
+        permissions: item.permissions ?? [],
+      })
+    )
+
+  const groups: Array<{ groupName: string; items: NavItem[] }> = []
+  let currentGroup: { groupName: string; items: NavItem[] } | null = null
+
+  accessibleItems.forEach((item) => {
     const groupName = item.group || ""
     
     if (groupName) {

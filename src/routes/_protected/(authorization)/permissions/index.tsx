@@ -10,20 +10,11 @@ import { DataTable } from "@/components/ui/data-table/datatable"
 import { createColumns } from "@/components/ui/data-table/create-column"
 import { tableColumns } from "./columns"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import type { FilterOption, Filters } from "@/components/ui/data-table/datatable"
+import { TableLoading } from "@/components/ui/data-table/table-loading"
+import type { FilterOption, Filters, ActionButton } from "@/components/ui/data-table/datatable"
+import { createPermissionDialogAction } from "./create-modal"
 
 const breadcrumb = [{ title: 'Data Permissions Management', url: '/permissions' }]
-
-const filterOptions: FilterOption[] = [
-  {
-    key: "status",
-    label: "Status",
-    options: [
-      { value: "active", label: "Active" },
-      { value: "inactive", label: "Inactive" },
-    ],
-  },
-]
 
 export const Route = createFileRoute('/_protected/(authorization)/permissions/')({
   beforeLoad: () => {
@@ -87,7 +78,22 @@ function RouteComponent() {
     [orderBy, orderDirection, page, perPage]
   )
 
-  if (isLoading && !data) return <>Loading...</>
+  if (isLoading && !data) return <TableLoading title="Data Permissions Management" />
+
+  const filterOptions: FilterOption[] = [
+    {
+      key: "status",
+      label: "Status",
+      options: [
+        { value: "active", label: "Active" },
+        { value: "inactive", label: "Inactive" },
+      ],
+    },
+  ]
+
+  const actionButtons: ActionButton[] = [
+    createPermissionDialogAction(),
+  ]
 
   return (
     <div className="py-6 space-y-6">
@@ -113,6 +119,7 @@ function RouteComponent() {
               setFilters(newFilters)
               setPage(1)
             }}
+            actionButtons={actionButtons}
           />
         </CardContent>
       </Card>

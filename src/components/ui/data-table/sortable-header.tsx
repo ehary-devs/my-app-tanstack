@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface SortableHeaderProps {
   label: string
@@ -7,6 +8,7 @@ interface SortableHeaderProps {
   orderBy: string
   orderDirection: "ASC" | "DESC"
   onSort: (columnKey: string, direction: "ASC" | "DESC") => void
+  className?: string
 }
 
 export function SortableHeader({
@@ -15,6 +17,7 @@ export function SortableHeader({
   orderBy,
   orderDirection,
   onSort,
+  className,
 }: SortableHeaderProps) {
   const isSorted = orderBy === columnKey
   const isAsc = isSorted && orderDirection === "ASC"
@@ -29,7 +32,7 @@ export function SortableHeader({
     <Button
       variant="ghost"
       onClick={handleClick}
-      className="h-8 px-2 lg:px-3 hover:bg-transparent"
+      className={cn("h-8 px-2 lg:px-3 hover:bg-transparent flex", className)}
     >
       {label}
       <span className="ml-2">
